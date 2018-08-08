@@ -5,8 +5,8 @@ from .models import cookies
 from .models import users
 
 
-def getLuckyMoney(url, mark):
-    user = users.objects.get(mark=mark)
+def getLuckyMoney(url, qq):
+    user = users.objects.get(qq=qq)
     if user.points <= 0:
         return "余额不足"
     phone = user.phone
@@ -20,7 +20,8 @@ def getLuckyMoney(url, mark):
         used_times = cookies.objects.get(id=id).used_times
         if next_lucky == 1:
             if used_times >= 5:
-                users.deductPoints(mark, 4)
+                user.points -= 4
+                user.save()
                 return "小号已用完，下个就是大包，可手动领取，谢谢，扣除4点，余额为{points}".format(points=user.points - 4)
             cookie = cookies.objects.get(id=id)
             eleme_key = cookie.eleme_key
@@ -32,11 +33,13 @@ def getLuckyMoney(url, mark):
             cookie.save()
             try:
                 (name, amount) = gethongbaodetail(response)
-                users.deductPoints(mark, 4)
+                user.points -= 4
+                user.save()
                 return "恭喜你领到{name}大包，金额{amount}元，扣除4点，余额为{points}".format(name=name, amount=amount,
                                                                            points=user.points - 4)
             except:
-                users.deductPoints(mark, 4)
+                user.points -= 4
+                user.save()
                 return "你可能到达每日领取上限或者已领取过此链接，下个就是大包，你可以分享给好友或者留至明天手动领取，扣除4点，余额为{points}".format(points=user.points - 4)
         elif next_lucky == 0:
             if used_times >= 5:
@@ -67,7 +70,6 @@ def getLuckyMoney(url, mark):
             except:
                 continue
             lastResidueNum = len(json.loads(response.text)['promotion_records'])
-            print(lastResidueNum)
 
 
 def changePhone(eleme_key, url_appand, phone):
@@ -75,7 +77,6 @@ def changePhone(eleme_key, url_appand, phone):
         'sign': eleme_key,
         'phone': phone
     }
-    print(data)
     requests.put('https://h5.ele.me/restapi/v1/weixin/' + url_appand + '/phone', json.dumps(data))
 
 
