@@ -1,16 +1,20 @@
 from django.http import HttpResponse
 import json
+import threading
 from django.shortcuts import render
 from .recharge import recharge
 from .index import getLuckyMoney
 from .models import users
-
+lock = threading.Lock()
 
 # Create your views here.
+def homepage(request):
+    return HttpResponse('Hello World!')
+
 
 def index(request):
     req = json.loads(request.body)
-    response = getLuckyMoney(req['url'],req['qq'])
+    response = threading.Thread(target=getLuckyMoney,args=(req['url'],req['qq']))
     return HttpResponse(response)
 
 
@@ -18,7 +22,7 @@ def pay(request):
     req = json.loads(request.body)
     content = req['content']
     qq = req['qq']
-    response = recharge(content,qq)
+    response = threading.Thread(target=recharge,args =(content,qq))
     return HttpResponse(response)
 
 def getPoints(request):
@@ -31,17 +35,22 @@ def getPoints(request):
     return HttpResponse('您当前的余额为{points}点'.format(points = user.points))
 
 def insertuser(request):
-    req = json.loads(request.body)
-    qq = req['qq']
-    phone = req['phone']
-    try:
-        user = users.objects.get(qq=qq)
-        user.phone = phone
-        user.save()
-        return HttpResponse("换绑成功")
-    except:
+    while True:
+        lock.acquire()
+        req = json.loads(request.body)
+        qq = req['qq']
+        phone = req['phone']
         try:
-            users.objects.create(qq=qq,phone=phone,points= 20)
-            return HttpResponse("绑定成功")
+            user = users.objects.get(qq=qq)
+            user.phone = phone
+            user.save()
+            lock.release()
+            return HttpResponse("换绑成功")
         except:
-            return HttpResponse("绑定失败")
+            try:
+                users.objects.create(qq=qq,phone=phone,points= 20)
+                lock.release()
+                return HttpResponse("绑定成功")
+            except:
+                lock.release()
+                return HttpResponse("绑定失败")
