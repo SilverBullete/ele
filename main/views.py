@@ -14,7 +14,7 @@ def homepage(request):
 
 def index(request):
     req = json.loads(request.body)
-    response = threading.Thread(target=getLuckyMoney,args=(req['url'],req['qq']))
+    response = getLuckyMoney(req['url'],req['qq'])
     return HttpResponse(response)
 
 
@@ -22,7 +22,7 @@ def pay(request):
     req = json.loads(request.body)
     content = req['content']
     qq = req['qq']
-    response = threading.Thread(target=recharge,args =(content,qq))
+    response = recharge(content,qq)
     return HttpResponse(response)
 
 def getPoints(request):
