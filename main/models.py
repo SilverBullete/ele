@@ -30,3 +30,8 @@ class kami(models.Model):
     kami = models.CharField(null=False,max_length=12)
     val = models.IntegerField(null=False)
     used = models.IntegerField(null=False,default=0)
+
+class logs(models.Model):
+    id = models.AutoField
+    qq = models.CharField(null=False, max_length=11)
+    money = models.CharField(null=False, max_length=11)

@@ -5,6 +5,10 @@ import threading
 lock = threading.Lock()
 
 def recharge(content, qq):
+    try:
+        user = users.objects.get(qq=qq)
+    except:
+        return "请先输入手机号码绑定，谢谢"
     while True:
         lock.acquire()
         kamis = kami.objects.filter(used=0)
@@ -27,7 +31,6 @@ def recharge(content, qq):
             lock.release()
             return None
         else:
-            user = users.objects.get(qq=qq)
             user.points += num
             mon = user.points
             user.save()

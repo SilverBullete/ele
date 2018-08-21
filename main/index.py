@@ -4,14 +4,18 @@ import json
 import threading
 from .models import cookies
 from .models import users
+from .models import logs
 
 lock = threading.Lock()
 
 
 def getLuckyMoney(url, qq):
+    try:
+        user = users.objects.get(qq=qq)
+    except:
+        return "请先输入手机号码绑定，谢谢"
     while True:
         lock.acquire()
-        user = users.objects.get(qq=qq)
         if user.points <= 0:
             lock.release()
             return "余额不足"
@@ -42,6 +46,7 @@ def getLuckyMoney(url, qq):
                     (name, amount) = gethongbaodetail(response)
                     user.points -= 4
                     user.save()
+                    logs.objects.create(qq=qq,money=amount)
                     lock.release()
                     return "恭喜你领到{name}大包，金额{amount}元，扣除4点，余额为{points}".format(name=name, amount=amount,
                                                                            points=user.points - 4)
@@ -75,10 +80,10 @@ def getLuckyMoney(url, qq):
                         cookie.used_times += 1
                         cookie.save()
                     if errortimes == 3:
-                        cookie.used_times = 10
-                        cookie.save()
-                        # return '链接有问题，此次不扣除点数，若确定没有问题可选择再次发送尝试'
-                        continue
+                        #cookie.used_times = 10
+                        #cookie.save()
+                        return '链接有问题，此次不扣除点数，若确定没有问题可选择再次发送尝试'
+                        #continue
                 except:
                     continue
                 lastResidueNum = len(json.loads(response.text)['promotion_records'])
