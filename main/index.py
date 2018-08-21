@@ -32,7 +32,7 @@ def getLuckyMoney(url, qq, lucky_number):
                     user.points -= 4
                     user.save()
                     lock.release()
-                    return "小号已用完，下个就是大包，可手动领取，谢谢，扣除4点，余额为{points}".format(points=user.points - 4)
+                    return "小号已用完，下个就是大包，可手动领取，谢谢，扣除4点，余额为{points}".format(points=user.points)
                 cookie = cookies.objects.get(id=id)
                 eleme_key = cookie.eleme_key
                 url_appand = cookie.url_appand
@@ -48,12 +48,12 @@ def getLuckyMoney(url, qq, lucky_number):
                     logs.objects.create(qq=qq,money=amount)
                     lock.release()
                     return "恭喜你领到{name}大包，金额{amount}元，扣除4点，余额为{points}".format(name=name, amount=amount,
-                                                                           points=user.points - 4)
+                                                                           points=user.points)
                 except:
                     user.points -= 4
                     user.save()
                     lock.release()
-                    return "你可能到达每日领取上限或者已领取过此链接，下个就是大包，你可以分享给好友或者留至明天手动领取，扣除4点，余额为{points}".format(points=user.points - 4)
+                    return "你可能到达每日领取上限或者已领取过此链接，下个就是大包，你可以分享给好友或者留至明天手动领取，扣除4点，余额为{points}".format(points=user.points)
             elif next_lucky == 0:
                 if used_times >= 5:
                     lock.release()
