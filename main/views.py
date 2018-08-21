@@ -14,7 +14,7 @@ def homepage(request):
 
 def index(request):
     req = json.loads(request.body)
-    response = getLuckyMoney(req['url'],req['qq'])
+    response = getLuckyMoney(req['url'],req['qq'],req['lucky_number'])
     return HttpResponse(response)
 
 

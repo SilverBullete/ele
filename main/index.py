@@ -9,7 +9,7 @@ from .models import logs
 lock = threading.Lock()
 
 
-def getLuckyMoney(url, qq):
+def getLuckyMoney(url, qq, lucky_number):
     try:
         user = users.objects.get(qq=qq)
     except:
@@ -20,7 +20,6 @@ def getLuckyMoney(url, qq):
             lock.release()
             return "余额不足"
         phone = user.phone
-        lucky_number = eval(url.split('lucky_number=')[1].split('&')[0])
         next_lucky = 0  # 判断下一个是否为大包
         lastResidueNum = 16
         errortimes = 0
