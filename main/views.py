@@ -9,7 +9,7 @@ lock = threading.Lock()
 
 # Create your views here.
 def homepage(request):
-    return HttpResponse('Hello World!')
+    return render(request, 'home.html')
 
 
 def index(request):
