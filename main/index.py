@@ -21,11 +21,11 @@ def getLuckyMoney(url, lucky_number):
                 if used_times >= 5:
                     lock.release()
                     return "小号已用完，还剩{num}个就是大包，抱歉".format(num=lucky_number - lastResidueNum)
-                cookie = cookie.objects.get(id=id)
-                eleme_key = cookie.eleme_key
-                url_appand = cookie.url_appand
-                track_id = cookie.track_id
-                c = cookie.cookie
+                coo = cookie.objects.get(id=id)
+                eleme_key = coo.eleme_key
+                url_appand = coo.url_appand
+                track_id = coo.track_id
+                c = coo.cookie
                 response = hongbao(url, eleme_key, url_appand, track_id, c, cookie.phone)
                 if response == "网址错误":
                     lock.release()
@@ -43,11 +43,11 @@ def getLuckyMoney(url, lucky_number):
                         errortimes += 1
                     else:
                         errortimes = 0
-                        cookie.used_times += 1
-                        cookie.save()
+                        coo.used_times += 1
+                        coo.save()
                     if errortimes == 3:
-                        cookie.used_times = 10
-                        cookie.save()
+                        coo.used_times = 10
+                        coo.save()
                         return '链接有问题，若确定没有问题可选择再次发送尝试'
                         #continue
                 except:
