@@ -18,11 +18,12 @@ import main.views
 from django.contrib import admin
 from django.urls import path
 
+
 urlpatterns = [
-    path('',main.views.homepage),
+    path('donate',main.views.homepage),
     path('admin/', admin.site.urls),
     path('api/', main.views.index),
     path('api/pay/',main.views.pay),
     path('api/getpoints/',main.views.getPoints),
-    path('api/add/',main.views.insertuser)
+    path('api/add/',main.views.insertuser),
 ]
