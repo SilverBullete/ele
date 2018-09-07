@@ -91,7 +91,7 @@ def hongbao(url, eleme_key, url_appand, track_id, cookie, phone):
         'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 MicroMessenger/6.5.2.501 NetType/WIFI WindowsWechat QBCore/3.43.691.400 QQBrowser/9.0.2524.400)',
     }
     request_url = 'https://h5.ele.me/restapi/marketing/promotion/weixin/' + url_appand
-    response = requests.post(request_url, json.dumps(data),header)
+    response = requests.post(request_url, data=json.dumps(data),headers=header)
     return response
 
 
