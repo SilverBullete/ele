@@ -84,6 +84,7 @@ def hongbao(url, eleme_key, url_appand, track_id, cookie, phone):
         "unionid": "fuck"
     }
     header = {
+        'content-type': 'text/plain;charset=UTF-8',
         'cookie': cookie,
         'Host': 'h5.ele.me',
         'origin': 'https://h5.ele.me',
