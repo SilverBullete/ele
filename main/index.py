@@ -61,6 +61,7 @@ def getLuckyMoney(url, qq, lucky_number):
                 cookie = cookies.objects.get(id=id)
                 eleme_key = cookie.eleme_key
                 url_appand = cookie.url_appand
+                changePhone(eleme_key,url_appand,cookie.phone)
                 response = hongbao(url, eleme_key, url_appand, cookie.phone)
                 if response == "网址错误":
                     lock.release()
@@ -123,8 +124,6 @@ def hongbao(url, eleme_key, url_appand, phone):
     # }
     request_url = 'https://h5.ele.me/restapi/marketing/promotion/weixin/' + url_appand
     response = requests.post(request_url, json.dumps(data))
-    # status = req.status_code
-    # if 200 <= status < 500:
     return response
 
 
