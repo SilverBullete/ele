@@ -30,9 +30,7 @@ def getLuckyMoney(url, lucky_number):
                 if response == "网址错误":
                     lock.release()
                     return "网址错误，此次不扣除点数，请换个链接再来吧"
-                if response.status_code==400:
-                    coo.used_times = 10
-                    coo.save()
+
                 try:
                     if len(json.loads(response.text)['promotion_records']) == lucky_number - 1:
                         next_lucky = 1
@@ -54,6 +52,9 @@ def getLuckyMoney(url, lucky_number):
                         return '链接有问题，若确定没有问题可选择再次发送尝试'
                         #continue
                 except:
+                    if response.status_code == 400:
+                        coo.used_times = 10
+                        coo.save()
                     continue
                 lastResidueNum = len(json.loads(response.text)['promotion_records'])
 
