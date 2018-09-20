@@ -3,17 +3,23 @@ import requests
 import json
 import threading
 from .models import cookie
+from .models import users
 
 lock = threading.Lock()
 
 
-def getLuckyMoney(url, lucky_number):
+def getLuckyMoney(url, lucky_number,qq):
     while True:
         lock.acquire()
         next_lucky = 0  # 判断下一个是否为大包
         lastResidueNum = 16
         errortimes = 0
         cook = cookie()
+        try:
+            user = users.objects.get(qq=qq)
+        except:
+            users.objects.create(qq=qq, points=20)
+            user = users.objects.get(qq=qq)
         while lastResidueNum >= 0:
             id = cook.getNextId()
             used_times = cookie.objects.get(id=id).used_times
@@ -34,8 +40,10 @@ def getLuckyMoney(url, lucky_number):
                 try:
                     if len(json.loads(response.text)['promotion_records']) == lucky_number - 1:
                         next_lucky = 1
+                        user.points -= 4
+                        user.save()
                         lock.release()
-                        return '下一个就是大包，请手动领取'
+                        return '下一个就是大包，请手动领取,余额为{point}'.format(point=user.points)
                     if len(json.loads(response.text)['promotion_records']) >= lucky_number:
                         lock.release()
                         return '大包已被领取,请换个链接再来吧'
@@ -53,7 +61,7 @@ def getLuckyMoney(url, lucky_number):
                         #continue
                 except:
                     if response.status_code == 400:
-                        coo.used_times = 10
+                        coo.used_times += 1
                         coo.save()
                     continue
                 lastResidueNum = len(json.loads(response.text)['promotion_records'])

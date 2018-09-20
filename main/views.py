@@ -14,7 +14,7 @@ def homepage(request):
 
 def index(request):
     req = json.loads(request.body)
-    response = getLuckyMoney(req['url'],req['lucky_number'])
+    response = getLuckyMoney(req['url'],req['lucky_number'],req['qq'])
     return HttpResponse(response)
 
 
@@ -31,7 +31,8 @@ def getPoints(request):
     try:
         user = users.objects.get(qq=qq)
     except:
-        return HttpResponse("请先绑定手机号码")
+        users.objects.create(qq=qq, points=20)
+        user = users.objects.get(qq=qq)
     return HttpResponse('您当前的余额为{points}点'.format(points = user.points))
 
 def insertuser(request):
@@ -48,7 +49,7 @@ def insertuser(request):
             return HttpResponse("换绑成功")
         except:
             try:
-                users.objects.create(qq=qq,phone=phone,points= 20)
+
                 lock.release()
                 return HttpResponse("绑定成功")
             except:

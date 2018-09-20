@@ -8,7 +8,8 @@ def recharge(content, qq):
     try:
         user = users.objects.get(qq=qq)
     except:
-        return "请先输入手机号码绑定，谢谢"
+        users.objects.create(qq=qq, points=20)
+        user = users.objects.get(qq=qq)
     while True:
         lock.acquire()
         kamis = kami.objects.filter(used=0)
