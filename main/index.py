@@ -8,7 +8,7 @@ from .models import users
 lock = threading.Lock()
 
 
-def getLuckyMoney(url, lucky_number,qq):
+def getLuckyMoney(url, lucky_number, qq):
     while True:
         lock.acquire()
         next_lucky = 0  # 判断下一个是否为大包
@@ -20,6 +20,8 @@ def getLuckyMoney(url, lucky_number,qq):
         except:
             users.objects.create(qq=qq, points=20)
             user = users.objects.get(qq=qq)
+        if user.points <= 0:
+            return "余额不足，请回复“充”充亻直"
         while lastResidueNum >= 0:
             id = cook.getNextId()
             used_times = cookie.objects.get(id=id).used_times
@@ -58,7 +60,7 @@ def getLuckyMoney(url, lucky_number,qq):
                         # coo.used_times = 10
                         # coo.save()
                         return '链接有问题，若确定没有问题可选择再次发送尝试'
-                        #continue
+                        # continue
                 except:
                     if response.status_code == 400:
                         coo.used_times += 1
@@ -104,7 +106,7 @@ def hongbao(url, eleme_key, url_appand, track_id, cookie, phone):
         'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 MicroMessenger/6.5.2.501 NetType/WIFI WindowsWechat QBCore/3.43.691.400 QQBrowser/9.0.2524.400)',
     }
     request_url = 'https://h5.ele.me/restapi/marketing/promotion/weixin/' + url_appand
-    response = requests.post(request_url, data=json.dumps(data),headers=header)
+    response = requests.post(request_url, data=json.dumps(data), headers=header)
     return response
 
 
