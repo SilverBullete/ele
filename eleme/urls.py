@@ -21,6 +21,7 @@ from django.urls import path
 
 urlpatterns = [
     path('donate/',main.views.homepage),
+    path('help/',main.views.help),
     path('admin/', admin.site.urls),
     path('api/', main.views.index),
     path('api/pay/',main.views.pay),

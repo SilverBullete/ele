@@ -11,6 +11,8 @@ lock = threading.Lock()
 def homepage(request):
     return render(request, 'home.html')
 
+def help(request):
+    return render(request, 'help.html')
 
 def index(request):
     req = json.loads(request.body)
