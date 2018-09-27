@@ -21,6 +21,7 @@ def getLuckyMoney(url, lucky_number, qq):
             users.objects.create(qq=qq, points=20)
             user = users.objects.get(qq=qq)
         if user.points <= 0:
+            lock.release()
             return "余额不足，请回复“充”充亻直"
         while lastResidueNum >= 0:
             id = cook.getNextId()
