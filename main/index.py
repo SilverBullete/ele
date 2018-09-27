@@ -45,7 +45,7 @@ def getLuckyMoney(url, lucky_number, qq):
                         user.points -= 4
                         user.save()
                         lock.release()
-                        return '下一个就是大包，请手动领取,余额为{point}'.format(point=user.points)
+                        return '下一个就是大包，请手动领取,余额为{point}（点击原分享链接领取）'.format(point=user.points)
                     if len(json.loads(response.text)['promotion_records']) >= lucky_number:
                         lock.release()
                         return '大包已被领取,请换个链接再来吧'
