@@ -36,7 +36,7 @@ def getLuckyMoney(url, lucky_number, qq):
                 track_id = coo.track_id
                 c = coo.cookie
                 response = hongbao(url, eleme_key, url_appand, track_id, c, coo.phone)
-                return response
+                return type(response)
                 if response == "网址错误":
                     lock.release()
                     return "网址错误，此次不扣除点数，请换个链接再来吧"
