@@ -15,7 +15,6 @@ def help(request):
     return render(request, 'help.html')
 
 def index(request):
-    return HttpResponse("done")
     req = json.loads(request.body)
     response = getLuckyMoney(req['url'],req['lucky_number'],req['qq'])
     return HttpResponse(response)
