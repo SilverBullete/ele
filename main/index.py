@@ -63,9 +63,9 @@ def getLuckyMoney(url, lucky_number, qq):
                         return '链接有问题，若确定没有问题可选择再次发送尝试'
                         # continue
                 except:
-                    if response.status_code == 400:
-                        coo.used_times += 1
-                        coo.save()
+
+                    coo.used_times += 1
+                    coo.save()
                     continue
                 lastResidueNum = len(json.loads(response.text)['promotion_records'])
 
